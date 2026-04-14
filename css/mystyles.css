@@ -1,0 +1,48 @@
+
+/* BACKGROUND */
+body {
+    background-color: #f5f7fa;
+    font-family: Arial, sans-serif;
+    color: #222;
+    margin: 0;
+}
+
+/* NAVIGATION */
+.nav {
+    background-color: #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+/* HEADER */
+.header {
+    background-color: #0e3386; /* Cubs blue */
+    color: white;
+    text-align: center;
+    padding: 40px;
+}
+
+/* SECTION BOXES */
+.section {
+    background-color: white;
+    margin: 20px auto;
+    padding: 20px;
+    width: 80%;
+    border-radius: 10px;
+}
+
+/* IMAGE */
+img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* LINKS */
+a {
+    color: #0e3386;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
