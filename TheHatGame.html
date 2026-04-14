@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hat Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f4f4f4;
+        padding-top: 50px;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    #game {
+        position: relative;
+        width: 400px;
+        height: 200px;
+        margin: 50px auto;
+    }
+
+    .hat-container {
+        position: absolute;
+        width: 100px;
+        text-align: center;
+        transition: left 0.6s;
+    }
+
+    .hat {
+        width: 100px;
+        height: 80px;
+        background: black;
+        border-radius: 50% 50% 0 0;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .hat::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: -20px;
+        width: 140px;
+        height: 20px;
+        background: black;
+        border-radius: 10px;
+    }
+
+    .item {
+        font-size: 30px;
+        height: 30px;
+        margin-bottom: 5px;
+        visibility: hidden;
+    }
+
+    #message {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    #restart {
+        margin-top: 20px;
+        padding: 10px 20px;
+        display: none;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h1>🎩 Hat Game</h1>
+<p>Watch carefully... then pick the correct hat!</p>
+
+<div id="game">
+    <div class="hat-container" id="hat0" style="left: 0px;">
+        <div class="item">💎</div>
+        <div class="hat" data-index="0"></div>
+    </div>
+
+    <div class="hat-container" id="hat1" style="left: 150px;">
+        <div class="item">💎</div>
+        <div class="hat" data-index="1"></div>
+    </div>
+
+    <div class="hat-container" id="hat2" style="left: 300px;">
+        <div class="item">💎</div>
+        <div class="hat" data-index="2"></div>
+    </div>
+</div>
+
+<div id="message"></div>
+<button id="restart">Play Again</button>
+
+<script>
+    const hats = document.querySelectorAll('.hat');
+    const containers = document.querySelectorAll('.hat-container');
+    const items = document.querySelectorAll('.item');
+    const message = document.getElementById('message');
+    const restartBtn = document.getElementById('restart');
+
+    let positions = [0, 150, 300];
+    let correctIndex;
+    let gameActive = false;
+
+    function startGame() {
+        message.textContent = "Memorize the correct hat!";
+        restartBtn.style.display = "none";
+        gameActive = false;
+
+        correctIndex = Math.floor(Math.random() * 3);
+
+        // Show item under correct hat
+        items.forEach((item, i) => {
+            item.style.visibility = i === correctIndex ? "visible" : "hidden";
+        });
+
+        // Hide after 1.5 seconds, then shuffle
+        setTimeout(() => {
+            items.forEach(item => item.style.visibility = "hidden");
+            shuffleHats();
+        }, 1500);
+    }
+
+    function shuffleHats() {
+        let shuffleCount = 6;
+
+        function doShuffle() {
+            if (shuffleCount === 0) {
+                message.textContent = "Pick a hat!";
+                gameActive = true;
+                return;
+            }
+
+            // swap two random hats
+            let i = Math.floor(Math.random() * 3);
+            let j = Math.floor(Math.random() * 3);
+
+            [positions[i], positions[j]] = [positions[j], positions[i]];
+
+            containers.forEach((c, idx) => {
+                c.style.left = positions[idx] + "px";
+            });
+
+            shuffleCount--;
+            setTimeout(doShuffle, 600);
+        }
+
+        doShuffle();
+    }
+
+    hats.forEach(hat => {
+        hat.addEventListener('click', () => {
+            if (!gameActive) return;
+
+            let guess = parseInt(hat.dataset.index);
+
+            if (guess === correctIndex) {
+                message.textContent = "🎉 You win!";
+                items[guess].style.visibility = "visible";
+            } else {
+                message.textContent = "❌ Wrong!";
+                items[correctIndex].style.visibility = "visible";
+            }
+
+            gameActive = false;
+            restartBtn.style.display = "inline-block";
+        });
+    });
+
+    restartBtn.addEventListener('click', startGame);
+
+    startGame();
+</script>
+
+</body>
+</html>
